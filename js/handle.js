@@ -897,7 +897,7 @@ $('#signup-form').on('submit', function (e){
     }
   $.ajax({
    type:"POST",
-   url:"./admin/registration/save",
+   url:"/admin/registration/save",
    data: {
     title:title,
     firstname:fname,
