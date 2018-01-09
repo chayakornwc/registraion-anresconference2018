@@ -20,6 +20,7 @@ let title = null;
 let submission_type =null;
 var gender = null
 var payTYPESTRING ="";
+var present_title = "Attend conference only";
 const _gender = $('.gender').find('[name=gender]');
   _gender.click(function(){
     gender = $(this).val();
@@ -29,6 +30,11 @@ const _gender = $('.gender').find('[name=gender]');
  $('.dialog-free').delegate('.js-submit', 'click', function(){
 $('#signup-form').submit();
  }) 
+
+
+ $('.predesc').delegate('[name=present_title]', 'change' ,   function (event) {
+  present_title = event.target.value
+ })
 $('.std-card').delegate('[type=file]', 'change', function(){
   var property = this.files[0];
   
@@ -36,7 +42,7 @@ $('.std-card').delegate('[type=file]', 'change', function(){
   fileData.append('file', property)
   
    $.ajax({
-    url:'http://anresconference2018.org/admin/registration/upload_student',
+    url:'http://192.168.1.110/anres.admin/registration/upload_student',
     type:'POST',
     data:fileData,
     contentType:false,
@@ -57,7 +63,7 @@ $('.mou-doc').delegate('[type=file]', 'change', function(){
   fileData.append('file', property)
   
   $.ajax({
-    url:'http://anresconference2018.org/admin/registration/upload_mou',
+    url:'http://192.168.1.110/anres.admin/registration/upload_mou',
     type:'POST',
     data:fileData,
     contentType:false,
@@ -185,7 +191,7 @@ preview.click(function(){
                  location.href = ".presentation_types";
                  $('.presentation_types').focus();
                  break;
-                 default:   swal({
+                 default:swal({
                   titile:"Something wentwrong !",
                   text:"Please select your gender ",
                   icon:"warning"   
@@ -231,7 +237,7 @@ preview.click(function(){
                 text:"Please choose a presentation type",
                 icon:"warning"   
                });
-            } else if (persentation_type == "Oral presentation" && submission_type ==null || persentation_type == "Poster presentation" && submission_type ==nul){
+            } else if (persentation_type == "Oral presentation" && submission_type ==null || persentation_type == "Poster presentation" && submission_type ==null){
               swal({
                 titile:"Something wentwrong !",
                 text:"Please choose a submisstion type",
@@ -257,7 +263,7 @@ preview.click(function(){
               feb = feb.getTime();
           var mar = new Date(2018, 2, 27)
               mar = mar.getTime();
-          console.log('Time:'+time+'jan:'+jan+'mar:'+mar);
+         
           switch($selection){
             case'International Student':
             switch(true){
@@ -369,7 +375,14 @@ preview.click(function(){
           totalpayment = addInformation(_USD+' USD');
           break;
         }
-       
+       if(present_title==''){
+         swal({
+          titile:"Sorry !",
+          text:"Please enter you presentation title",
+          icon:"warning"   
+        
+         });
+       }else{
        $.when(
         $('.dialog-free').append(
           $('<div>', {class:'modal fade ', "tabindex":"-1", role:"dialog", "aria-labelledby":"LargeModalLabel", "aria-hidden":"true"}).append(
@@ -394,8 +407,9 @@ preview.click(function(){
                 $('<li>', {text:'Country / Region '+Country}),
                 $('<li>', {text:'Postal '+ZipCode}),
                 $('<li>', {text:'email '+email}),
-                $('<li>', {text:'Attend as a '+$selection}),
+                $('<li>', {text:'Attend as a '+$selection}),           
                 $('<li>', {text:'Presentation type '+persentation_type}),
+                present_title=='Attend conference only' ? '':  $('<li>', {text:'Presentation title '+present_title}),
                submission_type !=null ?  $('<li>', {text:'Submission type '+submission_type}) : '' ,
                stdCard !=null ? $('<li>', {text:'Student card '+stdCard}) : '' ,
                 mouDoc !=null ? $('<li>', {text:'Mou Document '+mouDoc}) :'',
@@ -413,7 +427,7 @@ preview.click(function(){
       ).then(
         $('.modal').modal('show')
       )
-                
+    }         
          }
         }
         else if ($selection == 'Thai Delegate' ||$selection == 'Thai Student'){
@@ -429,7 +443,7 @@ preview.click(function(){
                 text:"Please choose a presentation type",
                 icon:"warning"   
                });
-            } else if (persentation_type == "Oral presentation" && submission_type ==null || persentation_type == "Poster presentation" && submission_type ==nul){
+            } else if (persentation_type == "Oral presentation" && submission_type ==null || persentation_type == "Poster presentation" && submission_type ==null){
               swal({
                 titile:"Something wentwrong !",
                 text:"Please choose a submisstion type",
@@ -507,8 +521,7 @@ preview.click(function(){
 
         }
         
-              
-        
+      
         // berfore submit
         switch(currentCurrency){
           case'THB':
@@ -518,7 +531,13 @@ preview.click(function(){
           totalpayment = addInformation(_USD+' USD');
           break;
         }
-       
+        if(present_title ==""){
+          swal({
+      titile:"Sorry !",
+      text:"Please enter you presentation title",
+      icon:"warning"   
+      });
+  } else {  //important else
        $.when(
         $('.dialog-free').append(
           $('<div>', {class:'modal fade ', "tabindex":"-1", role:"dialog", "aria-labelledby":"LargeModalLabel", "aria-hidden":"true"}).append(
@@ -543,13 +562,13 @@ preview.click(function(){
                 $('<li>', {text:'Country / Region '+Country}),
                 $('<li>', {text:'Postal '+ZipCode}),
                 $('<li>', {text:'email '+email}),
-                $('<li>', {text:'Attend as a '+$selection}),
+                $('<li>', {text:'Attend as a '+$selection}),           
                 $('<li>', {text:'Presentation type '+persentation_type}),
+                present_title=='Attend conference only' ? '':  $('<li>', {text:'Presentation title '+present_title}),
                submission_type !=null ?  $('<li>', {text:'Submission type '+submission_type}) : '' ,
                stdCard !=null ? $('<li>', {text:'Student card '+stdCard}) : '' ,
                 mouDoc !=null ? $('<li>', {text:'Mou Document '+mouDoc}) :'',
-                $('<li>', {text:'Payment Type '+payTYPESTRING}),
-                $('<li>', {text:'Total amount payable '+totalpayment})
+                $('<li>', {text:'Payment Type '+payTYPESTRING})
               )
            ),
            $('<div>',{class:"modal-footer"}).append(
@@ -563,6 +582,7 @@ preview.click(function(){
       ).then(
         $('.modal').modal('show')
       )
+          }
     }
          }
       }
@@ -584,6 +604,8 @@ $persentation_type.click(function(){
   const data = $('.submission_type');
     if($this =='Poster presentation' || $this =='Oral presentation'){
       data.empty();
+      $('.predesc').empty();
+      present_title = "";
       data.append(
         $('<span>',{text:" choose a submission types"}),
         $('<div>', {class:'linebox'}).append(
@@ -598,11 +620,19 @@ $persentation_type.click(function(){
           )
         )
       )
-      
+     $('.predesc').append(
+       $('<div>', {class:'lf input-field'}).append(
+       $('<span>').text('Presentation title'),
+       $('<input>', {type:'text',name:'present_title', required:'required'}),
+       $('<span>', {class:'material-bar'}) 
+     )
+    ) 
     }else{
       data.empty();
+      $('.predesc').empty();
+      present_title = "Attend conference only";
     }
-    
+  
     return persentation_type
 });
   function studentUpload(){
@@ -873,7 +903,7 @@ function isValidEmailAddress(emailAddress) {
     return pattern.test(emailAddress);
 };
 $('#signup-form').on('submit', function (e){
-  
+var callback = null;  
   e.preventDefault();
   var title = $('#title-select').val();
   let fname = $('#firstname').val();
@@ -894,10 +924,10 @@ $('#signup-form').on('submit', function (e){
         text:"Please check infomation and try agian",
         icon:"warning"   
       })
-    }
+    }else{
   $.ajax({
    type:"POST",
-   url:"/admin/registration/save",
+   url:"http://192.168.1.110/anres.admin/registration/save",
    data: {
     title:title,
     firstname:fname,
@@ -916,28 +946,66 @@ $('#signup-form').on('submit', function (e){
     payment_type:$PType,
     mou_doc:mouDoc,
     stu_card:stdCard,
+    presentation_title:present_title
   },
    success:function(response) {
-    swal("Success!", "you information update!", "success");
-  }
+     
+    res = JSON.parse(response)
+    if(res.id== 0 ){
+        swal ({
+          titile:"Error",
+          text:"System infomation invalid, Please contract administrator",
+          icon:"Error"   
+        })
+    }else if(res.error){
+      swal({
+        titile:"this email is already been registered",
+        text:"Please contract administrator, if you want to use this email",
+        icon:"warning"   
+      })
+    }else{
+        if(res.id !=0 && res.id !='' &&  res.id !=null && res.id  !='0') {  
+      $('#PSource').val(3);
+      $('#PSourceID').val(res.id);
+      $('#PDescription').val('ANRES 2018 International Conference of Agriculture and Natural Resources, Hotel Windsor Suites & Convention Bangkok Thailand |'+present_title);
+      $('#PType').val($PType);
+      $('#TotAmntTHB').val(_THB);
+      $('#TotAmntUSD').val(_USD);
+      $('#Email').val(email);
+      $('#Name').val(fname+" "+lname);
+      $('#Address').val(address);
+      $('#District').val(district);
+      $('#Province').val(province);
+      $('#ZipCode').val(ZipCode);
+      $('#Country').val(Country);
+      $('#ItemDetail').val(submission_type+'-'+presentation_type+';1;'+_USD+';'+_THB+';'); // ยังไม่ได้แก้
+      $('#RetURL').val('httpconfirm_payment://anresconference2018.org/admin/registration/confirm_payment');
+      $('#form1').submit();
+        }
+  // 
+    }
+  
+  } 
  
- })
-    $('#PSource').val(3);
-    $('#PSourceID').val(234);
-    $('#PDescription').val('ANRES 2018 International Conference of Agriculture and Natural Resources, Hotel Windsor Suites & Convention Bangkok Thailand');
-    $('#PType').val($PType);
-    $('#TotAmntTHB').val(5500);
-    $('#TotAmntUSD').val(0);
-    $('#Email').val(email);
-    $('#Name').val(fname+" "+lname);
-    $('#Address').val(address);
-    $('#District').val(district);
-    $('#Province').val(province);
-    $('#ZipCode').val(ZipCode);
-    $('#Country').val(Country);
-    $('#ItemDetail').val('Submitted fee for KJSS;1;80;2800|Accepted fee for ANRES;1;100;3500');
-    $('#RetURL').val('https://anresconference2018.org/admin/registration/comfirm_payment');
-// $('#form1').submit();
+ });
 
+
+    // $('#PSource').val(3);
+    // $('#PSourceID').val();
+    // $('#PDescription').val('ANRES 2018 International Conference of Agriculture and Natural Resources, Hotel Windsor Suites & Convention Bangkok Thailand |'+present_title);
+    // $('#PType').val($PType);
+    // $('#TotAmntTHB').val(5500);
+    // $('#TotAmntUSD').val(0);
+    // $('#Email').val(email);
+    // $('#Name').val(fname+" "+lname);
+    // $('#Address').val(address);
+    // $('#District').val(district);
+    // $('#Province').val(province);
+    // $('#ZipCode').val(ZipCode);
+    // $('#Country').val(Country);
+    // $('#ItemDetail').val('Submitted fee for KJSS;1;80;2800|Accepted fee for ANRES;1;100;3500');
+    // $('#RetURL').val('https://anresconference2018.org/admin/registration/comfirm_payment');
+// $('#form1').submit();
+    }
 
 })
