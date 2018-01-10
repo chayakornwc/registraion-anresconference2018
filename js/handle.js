@@ -42,7 +42,7 @@ $('.std-card').delegate('[type=file]', 'change', function(){
   fileData.append('file', property)
   
    $.ajax({
-    url:'http://192.168.1.110/anres.admin/registration/upload_student',
+    url:'/admin/registration/upload_student',
     type:'POST',
     data:fileData,
     contentType:false,
@@ -63,7 +63,7 @@ $('.mou-doc').delegate('[type=file]', 'change', function(){
   fileData.append('file', property)
   
   $.ajax({
-    url:'http://192.168.1.110/anres.admin/registration/upload_mou',
+    url:'/admin/registration/upload_mou',
     type:'POST',
     data:fileData,
     contentType:false,
@@ -94,7 +94,7 @@ preview.click(function(){
         switch(null || ""){
           case title :  
           swal({
-          titile:"Something wentwrong !",
+          title:"Something wentwrong !",
           text:"Please choose a title",
           icon:"warning"   
          });
@@ -103,7 +103,7 @@ preview.click(function(){
            break; 
            case fname :  
           swal({
-          titile:"Something wentwrong !",
+          title:"Something wentwrong !",
           text:"Please Enter your Firstname",
           icon:"warning"   
          });
@@ -112,7 +112,7 @@ preview.click(function(){
            break; 
            case lname :  
            swal({
-           titile:"Something wentwrong !",
+           title:"Something wentwrong !",
            text:"Please Enter your Lastname",
            icon:"warning"   
           });
@@ -121,7 +121,7 @@ preview.click(function(){
              break; 
           case affiliation :  
              swal({
-             titile:"Something wentwrong !",
+             title:"Something wentwrong !",
              text:"Please Enter your affiliation",
              icon:"warning"   
             });
@@ -130,7 +130,7 @@ preview.click(function(){
               break; 
               case address :  
               swal({
-              titile:"Something wentwrong !",
+              title:"Something wentwrong !",
               text:"Please Enter your address",
               icon:"warning"   
              });
@@ -139,7 +139,7 @@ preview.click(function(){
                break; 
                case district :  
                swal({
-               titile:"Something wentwrong !",
+               title:"Something wentwrong !",
                text:"Please Enter your district",
                icon:"warning"   
               });
@@ -148,7 +148,7 @@ preview.click(function(){
                 break;
                case province:
                swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please Enter your Province",
                 icon:"warning"   
                });
@@ -157,7 +157,7 @@ preview.click(function(){
                break;  
                 case ZipCode :  
                 swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please Enter your Postal or ZipCode",
                 icon:"warning"   
                });
@@ -166,7 +166,7 @@ preview.click(function(){
                  break; 
                  case Country :  
                  swal({
-                 titile:"Something wentwrong !",
+                 title:"Something wentwrong !",
                  text:"Please select you country",
                  icon:"warning"   
                 });
@@ -175,7 +175,7 @@ preview.click(function(){
                   break;
                   case email :  
                   swal({
-                  titile:"Something wentwrong !",
+                  title:"Something wentwrong !",
                   text:"Please Enter your email",
                   icon:"warning"   
                  });
@@ -184,7 +184,7 @@ preview.click(function(){
                  break;
                  case $selection:
                  swal({
-                  titile:"Something wentwrong !",
+                  title:"Something wentwrong !",
                   text:"Please select your attend as ",
                   icon:"warning"   
                  });
@@ -192,7 +192,7 @@ preview.click(function(){
                  $('.presentation_types').focus();
                  break;
                  default:swal({
-                  titile:"Something wentwrong !",
+                  title:"Something wentwrong !",
                   text:"Please select your gender ",
                   icon:"warning"   
                  });  
@@ -204,7 +204,7 @@ preview.click(function(){
       {
               if ($selection ==null){
                 swal({
-                  titile:"Something wentwrong !",
+                  title:"Something wentwrong !",
                   text:"Would your like attends as?",
                   icon:"warning"   
                  });
@@ -212,7 +212,7 @@ preview.click(function(){
         if($selection =='International Student' || $selection=='International Student (ASEAN/MOU with KU)' || $selection=='International Delegate' ||$selection== 'International Delegate (ASEAN/MOU with KU)'){
             if($selection =="International Student" && stdCard ==null){
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please  upload you student card",
                 icon:"warning"   
                });
@@ -220,32 +220,32 @@ preview.click(function(){
             
             } else if($selection=='International Student (ASEAN/MOU with KU)' && stdCard ==null || $selection=='International Student (ASEAN/MOU with KU)' && mouDoc ==null){
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please  upload you student card and mou document",
                 icon:"warning"   
                });
             } else if  ($selection =="International Delegate (ASEAN/MOU with KU)" && mouDoc ==null){
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please  upload you  mou document",
                 icon:"warning"   
                });
             }
             else if (persentation_type == null) {
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please choose a presentation type",
                 icon:"warning"   
                });
             } else if (persentation_type == "Oral presentation" && submission_type ==null || persentation_type == "Poster presentation" && submission_type ==null){
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please choose a submisstion type",
                 icon:"warning"   
                });
             }else if ($PType ==null){
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please choose a payment type",
                 icon:"warning"   
                });
@@ -283,7 +283,7 @@ preview.click(function(){
               
                default: 
                swal({
-                titile:"Sorry !",
+                title:"Sorry !",
                 text:"Sorry This time registration was closed",
                 icon:"warning"   
                 });
@@ -308,7 +308,7 @@ preview.click(function(){
             
              default: 
              swal({
-              titile:"Sorry !",
+              title:"Sorry !",
               text:"Sorry This time registration was closed",
               icon:"warning"   
               });
@@ -333,7 +333,7 @@ preview.click(function(){
               
                default: 
                swal({
-                titile:"Sorry !",
+                title:"Sorry !",
                 text:"Sorry This time registration was closed",
                 icon:"warning"   
                 });
@@ -358,7 +358,7 @@ preview.click(function(){
                 
                  default: 
                  swal({
-                  titile:"Sorry !",
+                  title:"Sorry !",
                   text:"Sorry This time registration was closed",
                   icon:"warning"   
                   });
@@ -377,7 +377,7 @@ preview.click(function(){
         }
        if(present_title==''){
          swal({
-          titile:"Sorry !",
+          title:"Sorry !",
           text:"Please enter you presentation title",
           icon:"warning"   
         
@@ -411,8 +411,8 @@ preview.click(function(){
                 $('<li>', {text:'Presentation type '+persentation_type}),
                 present_title=='Attend conference only' ? '':  $('<li>', {text:'Presentation title '+present_title}),
                submission_type !=null ?  $('<li>', {text:'Submission type '+submission_type}) : '' ,
-               stdCard !=null ? $('<li>', {text:'Student card '+stdCard}) : '' ,
-                mouDoc !=null ? $('<li>', {text:'Mou Document '+mouDoc}) :'',
+               stdCard !=null ? $('<li>').append($('<a>', {target:"_blank", href:"/public/uploads/file/"+stdCard, text:'Student card '+stdCard})) : '' ,
+                mouDoc !=null ? $('<li>').append($('<a>', {target:"_blank", href:"/public/uploads/file/"+mouDoc, text:'Student card '+mouDoc})) :'',
                 $('<li>', {text:'Payment Type '+payTYPESTRING})
               )
            ),
@@ -433,25 +433,25 @@ preview.click(function(){
         else if ($selection == 'Thai Delegate' ||$selection == 'Thai Student'){
             if($selection == 'Thai Student' && stdCard==null){
               swal({
-                titile:"Sorry !",
+                title:"Sorry !",
                 text:"Please upload your student card",
                 icon:"warning"   
                 });
             }else if (persentation_type == null) {
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please choose a presentation type",
                 icon:"warning"   
                });
             } else if (persentation_type == "Oral presentation" && submission_type ==null || persentation_type == "Poster presentation" && submission_type ==null){
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please choose a submisstion type",
                 icon:"warning"   
                });
             }else if ($PType ==null){
               swal({
-                titile:"Something wentwrong !",
+                title:"Something wentwrong !",
                 text:"Please choose a payment type",
                 icon:"warning"   
                });
@@ -486,7 +486,7 @@ preview.click(function(){
               
                default: 
                swal({
-                titile:"Sorry !",
+                title:"Sorry !",
                 text:"Sorry This time registration was closed",
                 icon:"warning"   
                 });
@@ -511,7 +511,7 @@ preview.click(function(){
           
            default: 
            swal({
-            titile:"Sorry !",
+            title:"Sorry !",
             text:"Sorry This time registration was closed",
             icon:"warning"   
             });
@@ -533,7 +533,7 @@ preview.click(function(){
         }
         if(present_title ==""){
           swal({
-      titile:"Sorry !",
+      title:"Sorry !",
       text:"Please enter you presentation title",
       icon:"warning"   
       });
@@ -566,8 +566,12 @@ preview.click(function(){
                 $('<li>', {text:'Presentation type '+persentation_type}),
                 present_title=='Attend conference only' ? '':  $('<li>', {text:'Presentation title '+present_title}),
                submission_type !=null ?  $('<li>', {text:'Submission type '+submission_type}) : '' ,
-               stdCard !=null ? $('<li>', {text:'Student card '+stdCard}) : '' ,
-                mouDoc !=null ? $('<li>', {text:'Mou Document '+mouDoc}) :'',
+               stdCard !=null ? $('<li>').append(
+                 $('<a>', {target:"_blank", href:'/public/uploads/file/'+stdCard,text:'Student card '+stdCard})
+               ) : '' ,
+                mouDoc !=null ? $('<li>').append(
+                  $('<a>', {target:"_blank", href:"/public/uploads/file/"+mouDoc , text:'Moudocument'+mouDoc })
+                ) :'',
                 $('<li>', {text:'Payment Type '+payTYPESTRING})
               )
            ),
@@ -920,14 +924,14 @@ var callback = null;
     if (title=="" || title== null ){
       $('.modal').modal('hide');
       swal({
-        titile:"Something wentwrong !",
+        title:"Something wentwrong !",
         text:"Please check infomation and try agian",
         icon:"warning"   
       })
     }else{
   $.ajax({
    type:"POST",
-   url:"http://192.168.1.110/anres.admin/registration/save",
+   url:"/admin/registration/save",
    data: {
     title:title,
     firstname:fname,
@@ -953,21 +957,36 @@ var callback = null;
     res = JSON.parse(response)
     if(res.id== 0 ){
         swal ({
-          titile:"Error",
+          title:"Error",
           text:"System infomation invalid, Please contract administrator",
           icon:"Error"   
         })
     }else if(res.error){
-      swal({
-        titile:"this email is already been registered",
-        text:"Please contract administrator, if you want to use this email",
-        icon:"warning"   
-      })
-    }else{
-        if(res.id !=0 && res.id !='' &&  res.id !=null && res.id  !='0') {  
+      $.each(res.error, function(key, values){
+        console.log(key)
+        switch(key){
+          case'email':
+          swal ({
+            title:"Warning",
+            text:"This email is already been registered",
+            icon:"warning"   
+          })
+          break;
+          default:({
+            title:"Warning",
+            text:"Please try agian",
+            icon:"warning"   
+          })
+          break;
+        }
+      });    
+    }
+    
+    else{
+        if(res.id !=0 ) {  
       $('#PSource').val(3);
       $('#PSourceID').val(res.id);
-      $('#PDescription').val('ANRES 2018 International Conference of Agriculture and Natural Resources, Hotel Windsor Suites & Convention Bangkok Thailand |'+present_title);
+      $('#PDescription').val('ANRES 2018 International Conference of Agriculture and Natural Resources |'+present_title);
       $('#PType').val($PType);
       $('#TotAmntTHB').val(_THB);
       $('#TotAmntUSD').val(_USD);
@@ -978,8 +997,8 @@ var callback = null;
       $('#Province').val(province);
       $('#ZipCode').val(ZipCode);
       $('#Country').val(Country);
-      $('#ItemDetail').val(submission_type+'-'+presentation_type+';1;'+_USD+';'+_THB+';'); // ยังไม่ได้แก้
-      $('#RetURL').val('httpconfirm_payment://anresconference2018.org/admin/registration/confirm_payment');
+      $('#ItemDetail').val(submission_type+'-'+persentation_type+';1;'+_USD+';'+_THB+';'); 
+      $('#RetURL').val('http://anresconference2018.org/admin/registration/confirmpayment');
       $('#form1').submit();
         }
   // 
