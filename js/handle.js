@@ -17,20 +17,60 @@ let mouDoc = null;
 let stdCardP = null;
 let mouDocP = null;
 let title = null;
-let submission_type =null;
+let submission_type ='';
 var gender = null
 var payTYPESTRING ="";
+var agree = false;
 var present_title = "Attend conference only";
 const _gender = $('.gender').find('[name=gender]');
+
+
+ function number_format(number, decimals, dec_point, thousands_sep) {
+  // Strip all characters but numerical ones.
+    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + Math.round(n * k) / k;
+        };
+
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+
+    return s.join(dec);
+}
+
   _gender.click(function(){
     gender = $(this).val();
     return gender
   })
 
  $('.dialog-free').delegate('.js-submit', 'click', function(){
-$('#signup-form').submit();
- }) 
+    if(agree){
+      $('#signup-form').submit();
+    }else{
+      swal({
+        title:"Please agree to our terms of use!",
+        text:" ",
+        icon:"warning"   
+      })
+    }
 
+ }) 
+ $('.dialog-free').delegate('#agreeCheck1','change', 'click', function(e){
+  agree = e.target.checked
+   }) 
 
  $('.predesc').delegate('[name=present_title]', 'change' ,   function (event) {
   present_title = event.target.value
@@ -369,7 +409,7 @@ preview.click(function(){
                  // berfore submit
         switch(currentCurrency){
           case'THB':
-          totalpayment = addInformation(_THB+' Bath');
+          totalpayment = number_format(_THB)+' Baht'
           break;
           case'USD':
           totalpayment = addInformation(_USD+' USD');
@@ -396,25 +436,30 @@ preview.click(function(){
 
              ),
              $('<div>',{class:"modal-body"}).append(
-              $('<ul>').append(
-                $('<li>',{text:`Title `+title}),
-                $('<li>',{text:'First Name '+fname}),
-                $('<li>',{text:'Last Name '+lname}),
-                $('<li>',{text:"Gender "+gender}),
-                $('<li>',{text:"Affiliation "+affiliation}),
-                $('<li>', {text:'Address '+address}),
-                $('<li>', {text:'State / Province '+province}),
-                $('<li>', {text:'Country / Region '+Country}),
-                $('<li>', {text:'Postal '+ZipCode}),
-                $('<li>', {text:'email '+email}),
-                $('<li>', {text:'Attend as a '+$selection}),           
-                $('<li>', {text:'Presentation type '+persentation_type}),
-                present_title=='Attend conference only' ? '':  $('<li>', {text:'Presentation title '+present_title}),
-               submission_type !=null ?  $('<li>', {text:'Submission type '+submission_type}) : '' ,
-               stdCard !=null ? $('<li>').append($('<a>', {target:"_blank", href:"/public/uploads/file/"+stdCard, text:'Student card '+stdCard})) : '' ,
-                mouDoc !=null ? $('<li>').append($('<a>', {target:"_blank", href:"/public/uploads/file/"+mouDoc, text:'Student card '+mouDoc})) :'',
-                $('<li>', {text:'Payment Type '+payTYPESTRING})
-              )
+              $('<table>', {class:"preview_table"}).append(
+                $('<tr>').append($('<th>',{text:'Title'}),$('<td>',{text:title})),
+                $('<tr>').append($('<th>', {text:'First Name'}), $('<td>', {text:fname})),
+                $('<tr>').append($('<th>',{text:'Last Name'}), $('<td>', {text:lname})),
+                $('<tr>').append($('<th>', {text:'Gender'}),$('<td>',{text:gender})),
+                $('<tr>').append($('<th>', {text:'Affiliation'}),$('<td>',{text:affiliation})),
+                $('<tr>').append($('<th>', {text:'Address'}),$('<td>',{text:address})),
+                $('<tr>').append($('<th>', {text:'State / Province'}),$('<td>',{text:province})),
+                $('<tr>').append($('<th>', {text:'Country / Region'}),$('<td>',{text:Country})),
+                $('<tr>').append($('<th>', {text:'Postal'}),$('<td>',{text:ZipCode})),
+                $('<tr>').append($('<th>', {text:'email'}),$('<td>',{text:email})),
+                $('<tr>').append($('<th>', {text:'Attend as a'}),$('<td>',{text:$selection})),
+                $('<tr>').append($('<th>', {text:'Presentation type'}),$('<td>',{text:persentation_type})),
+                present_title=='Attend conference only' ? '': $('<tr>').append($('<th>', {text:'Presentation title'}),$('<td>',{text:present_title})),
+                submission_type !=null ?  $('<tr>').append($('<th>', {text:'Submission type'}),$('<td>',{text:submission_type})) : '',    
+                stdCard !=null ? $('<tr>').append($('<th>',{text:'Student card'}),$('<td>').append($('<a>', {target:"_blank", href:"/public/uploads/file/"+stdCard, text:stdCard}))) : '' ,
+                mouDoc !=null ?  $('<tr>').append($('<th>',{text:'Mou Document'}),$('<td>').append($('<a>', {target:"_blank", href:"/public/uploads/file/"+mouDoc, text:mouDoc}))) : '' ,
+                $('<tr>').append($('<th>', {text:'Payment Type'}),$('<td>',{text:payTYPESTRING})),
+                $('<tr>').append($('<th>', {text:'Total amount payable'}),  $('<td>',{text:totalpayment}))
+              ),
+              $('<span>',{ class:'red my-auto note',text:'Please note all payments are non-refundable. ***'}),
+              $('<div>',{class:'form-check'}).append($('<input>',{type:'checkbox', class:'form-check-input', id:'agreeCheck1'}),
+                                                      $('<label>',{class:'form-check-label',text:' I Agree', for:'agreeCheck1'})
+            )
            ),
            $('<div>',{class:"modal-footer"}).append(
              $('<button>', {type:"button", class:"btn btn-orange js-submit", text:"Confirm and payment"}),
@@ -525,7 +570,7 @@ preview.click(function(){
         // berfore submit
         switch(currentCurrency){
           case'THB':
-          totalpayment = addInformation(_THB+' Baht ');
+          totalpayment = number_format(_THB) +' Baht';
           break;
           case'USD':
           totalpayment = addInformation(_USD+' USD');
@@ -551,29 +596,30 @@ preview.click(function(){
 
              ),
              $('<div>',{class:"modal-body"}).append(
-              $('<ul>').append(
-                $('<li>',{text:`Title `+title}),
-                $('<li>',{text:'First Name '+fname}),
-                $('<li>',{text:'Last Name '+lname}),
-                $('<li>',{text:"Gender "+gender}),
-                $('<li>',{text:"Affiliation "+affiliation}),
-                $('<li>', {text:'Address '+address}),
-                $('<li>', {text:'State / Province '+province}),
-                $('<li>', {text:'Country / Region '+Country}),
-                $('<li>', {text:'Postal '+ZipCode}),
-                $('<li>', {text:'email '+email}),
-                $('<li>', {text:'Attend as a '+$selection}),           
-                $('<li>', {text:'Presentation type '+persentation_type}),
-                present_title=='Attend conference only' ? '':  $('<li>', {text:'Presentation title '+present_title}),
-               submission_type !=null ?  $('<li>', {text:'Submission type '+submission_type}) : '' ,
-               stdCard !=null ? $('<li>').append(
-                 $('<a>', {target:"_blank", href:'/public/uploads/file/'+stdCard,text:'Student card '+stdCard})
-               ) : '' ,
-                mouDoc !=null ? $('<li>').append(
-                  $('<a>', {target:"_blank", href:"/public/uploads/file/"+mouDoc , text:'Moudocument'+mouDoc })
-                ) :'',
-                $('<li>', {text:'Payment Type '+payTYPESTRING})
-              )
+              $('<table>', {class:"preview_table"}).append(
+                $('<tr>').append($('<th>',{text:'Title'}),$('<td>',{text:title})),
+                $('<tr>').append($('<th>', {text:'First Name'}), $('<td>', {text:fname})),
+                $('<tr>').append($('<th>',{text:'Last Name'}), $('<td>', {text:lname})),
+                $('<tr>').append($('<th>', {text:'Gender'}),$('<td>',{text:gender})),
+                $('<tr>').append($('<th>', {text:'Affiliation'}),$('<td>',{text:affiliation})),
+                $('<tr>').append($('<th>', {text:'Address'}),$('<td>',{text:address})),
+                $('<tr>').append($('<th>', {text:'State / Province'}),$('<td>',{text:province})),
+                $('<tr>').append($('<th>', {text:'Country / Region'}),$('<td>',{text:Country})),
+                $('<tr>').append($('<th>', {text:'Postal'}),$('<td>',{text:ZipCode})),
+                $('<tr>').append($('<th>', {text:'email'}),$('<td>',{text:email})),
+                $('<tr>').append($('<th>', {text:'Attend as a'}),$('<td>',{text:$selection})),
+                $('<tr>').append($('<th>', {text:'Presentation type'}),$('<td>',{text:persentation_type})),
+                present_title=='Attend conference only' ? '': $('<tr>').append($('<th>', {text:'Presentation title'}),$('<td>',{text:present_title})),
+                submission_type !=null ?  $('<tr>').append($('<th>', {text:'Submission type'}),$('<td>',{text:submission_type})) : '',    
+                stdCard !=null ? $('<tr>').append($('<th>',{text:'Student card'}),$('<td>').append($('<a>', {target:"_blank", href:"/public/uploads/file/"+stdCard, text:stdCard}))) : '' ,
+                mouDoc !=null ?  $('<tr>').append($('<th>',{text:'Mou Document'}),$('<td>').append($('<a>', {target:"_blank", href:"/public/uploads/file/"+mouDoc, text:mouDoc}))) : '' ,
+                $('<tr>').append($('<th>', {text:'Payment Type'}),$('<td>',{text:payTYPESTRING})),
+                $('<tr>').append($('<th>', {text:'Total amount payable'}),  $('<td>',{text:totalpayment}))
+              ),
+              $('<span>',{ class:'red my-auto note',text:'Please note all payments are non-refundable. ***'}),
+              $('<div>',{class:'form-check'}).append($('<input>',{type:'checkbox', class:'form-check-input', id:'agreeCheck1'}),
+                                                      $('<label>',{class:'form-check-label',text:' I Agree', for:'agreeCheck1'})
+            )
            ),
            $('<div>',{class:"modal-footer"}).append(
             $('<button>', {type:"button", class:"btn btn-orange js-submit", text:"Confirm and payment"}),
@@ -595,6 +641,7 @@ preview.click(function(){
 
 $('.dialog-free').delegate('.modal','hidden.bs.modal', function (e) {
   $('.dialog-free').empty();
+  agree =false;
 })
 
 $('.submission_type').delegate('[name=submission_types]', 'click', function(){
@@ -654,8 +701,8 @@ $attendas.click( function(){
   $('.std-card').append(
     $('<div>', {class:'form-group'}).append(
       $('<label>', {for:"Stdinput"}).text('Please upload your student card'),
-      $('<input>', {type:"file", id:"Stdinput", name:"std-card", class:"form-control-file", "aria-describedby":"fileHelp"}),
-      $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only JPEG or JPG file(.jpg) and file size must not more than 2MB')
+      $('<input>', {type:"file", accept:"application/pdf", id:"Stdinput", name:"std-card", class:"form-control-file", "aria-describedby":"fileHelp"}),
+      $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only PDF file(.pdf) and file size must not more than 2MB')
       )
     )
   $('.payment-type').append(
@@ -689,7 +736,7 @@ $attendas.click( function(){
         )
       )
     )
-  
+    
   
     break;
     case 'International Student':
@@ -699,8 +746,8 @@ $attendas.click( function(){
     $('.std-card').append(
       $('<div>', {class:'form-group'}).append(
         $('<label>', {for:"Stdinput"}).text('Please upload your student card'),
-        $('<input>', {type:"file", id:"Stdinput", nfme:"std-card", class:"form-control-file", "aria-describedby":"fileHelp"}),
-        $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only JPEG or JPG file(.jpg) and file size must not more than 2MB')
+        $('<input>', {type:"file", accept:"application/pdf", id:"Stdinput", name:"std-card", class:"form-control-file", "aria-describedby":"fileHelp"}),
+        $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only PDF(.pdf) and file size must not more than 2MB')
           
         )
       )
@@ -722,16 +769,16 @@ $attendas.click( function(){
     $('.std-card').append(
       $('<div>', {class:'form-group'}).append(
         $('<label>', {for:"Stdinput"}).text('Please upload your student card'),
-        $('<input>', {type:"file", name:"std-card", id:"Stdinput", class:"form-control-file", "aria-describedby":"fileHelp"}),
-        $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only JPEG or JPG file(.jpg) and file size must not more than 2MB')
+        $('<input>', {type:"file", accept:"application/pdf", id:"Stdinput", name:"std-card", class:"form-control-file", "aria-describedby":"fileHelp"}),
+        $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload PDF file(.pdf) and file size must not more than 2MB')
           
         )
       )
       $('.mou-doc').append(
         $('<div>', {class:'form-group'}).append(
           $('<label>', {for:"mou-input"}).text('Please upload your mou document'),
-          $('<input>', {type:"file", name:"mou-doc", id:"mou-input", class:"form-control-file", "aria-describedby":"fileHelp"}),
-          $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only JPEG or JPG file(.jpg) and file size must not more than 2MB')
+          $('<input>', {type:"file", accept:"application/pdf", name:"mou-doc", id:"mou-input", class:"form-control-file", "aria-describedby":"fileHelp"}),
+          $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only PDF file(.pdf) and file size must not more than 2MB')
             
           )
         )
@@ -767,8 +814,8 @@ $attendas.click( function(){
     $('.mou-doc').append(
       $('<div>', {class:'form-group'}).append(
         $('<label>', {for:"mou-input"}).text('Please upload your mou document'),
-        $('<input>', {type:"file", name:"mou-doc", id:"mou-input", class:"form-control-file", "aria-describedby":"fileHelp"}),
-        $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only JPEG or JPG file(.jpg) and file size must not more than 2MB')
+        $('<input>', {type:"file", accept:"application/pdf", name:"mou-doc", id:"mou-input", class:"form-control-file", "aria-describedby":"fileHelp"}),
+        $('<small>', {id:"fileHelp", class:"form-text text-muted"}).text('Please upload only PDF file(.pdf) and file size must not more than 2MB')
         )
       )
       $('.payment-type').append(
@@ -997,8 +1044,8 @@ var callback = null;
       $('#Province').val(province);
       $('#ZipCode').val(ZipCode);
       $('#Country').val(Country);
-      $('#ItemDetail').val(submission_type+'-'+persentation_type+';1;'+_USD+';'+_THB+';'); 
-      $('#RetURL').val('http://anresconference2018.org/admin/registration/confirmpayment');
+  submission_type ==''?   $('#ItemDetail').val(persentation_type+';1;'+_USD+';'+_THB+';') : $('#ItemDetail').val(submission_type+'-'+persentation_type+';1;'+_USD+';'+_THB+';'); 
+     $('#RetURL').val('http://anresconference2018.org/admin/registration/confirmpayment');
       $('#form1').submit();
         }
   // 
